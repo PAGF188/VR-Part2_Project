@@ -1,6 +1,10 @@
 import numpy as np
 from scipy import signal
 from config import *
+import pdb
+import cv2
+from time import perf_counter
+from sklearn.cluster import KMeans
 
 def gen_dgauss(sigma):
     '''
@@ -60,7 +64,7 @@ class DsiftExtractor:
         #pyplot.imshow(self.weights)
         #pyplot.show()
         
-    def process_image(self, image, positionNormalize = True,verbose = True):
+    def process_image(self, image, positionNormalize = True, verbose = False):
         '''
         processes a single image, return the locations and the values of detected SIFT features.
         image: a M*N image which is a numpy 2D array. Color images will automatically be converted to grayscale.
@@ -140,3 +144,44 @@ class DsiftExtractor:
         feaArr[hcontrast] /= np.sqrt(np.sum(feaArr[hcontrast]**2,axis=1)).\
                 reshape((feaArr[hcontrast].shape[0],1))
         return feaArr
+
+
+def build_bow(images_names, n_clusters, des):
+    """Build bow.
+
+    Parameters
+    ----------
+    images_names : dict
+        Images groupped by class
+    n_clusters : int
+    des : feature dense descriptor
+
+    Returns
+    -------
+    
+    """
+
+    descriptor_list = []
+    labels = np.array([])
+
+    # ESTADISTICAS ###
+    init_time = perf_counter()
+    no_images = 0
+    n_totales = len(LABEL_MAPPER.keys()) * TRAIN_N_IMAGES
+    print(f'Computing features... 0/{n_totales}')
+    ############################################################################
+
+    for class_name in images_names.keys(): 
+        labels = np.concatenate([labels, np.repeat(int(LABEL_MAPPER[class_name]), len(images_names[class_name]))])
+        for img_name in images_names[class_name]:
+            img = cv2.imread(img_name, 0)
+            feaArr, positions = des.process_image(img)
+            descriptor_list.append(feaArr)
+
+            no_images += 1
+            if (no_images % 50) == 0:
+                actual_time = perf_counter() - init_time
+                print('Computing features... %d/%d ( eta: %.1f s )' % (no_images, n_totales, (n_totales - no_images)  * actual_time / no_images))    
+    
+    pdb.set_trace()
+
