@@ -158,12 +158,15 @@ def build_bow(images_names, n_clusters, des):
 
     Returns
     -------
-    
+    kmeans: <class 'sklearn.cluster._kmeans.KMeans'>
+        Bag of visual words
+    descriptor_list: raw features of eacg image.
+        If None 
     """
 
-    descriptor_list = []
     labels = np.array([])
-
+    descriptors = None
+    descriptor_list = []
     # ESTADISTICAS ###
     init_time = perf_counter()
     no_images = 0
@@ -175,13 +178,48 @@ def build_bow(images_names, n_clusters, des):
         labels = np.concatenate([labels, np.repeat(int(LABEL_MAPPER[class_name]), len(images_names[class_name]))])
         for img_name in images_names[class_name]:
             img = cv2.imread(img_name, 0)
+            img = cv2.resize(img,(150,150))   # TO RESIZE. CONSIDERAR ELIMINARLO
             feaArr, positions = des.process_image(img)
             descriptor_list.append(feaArr)
+            # 1 image -> inicialite array
+            if no_images == 0:
+                descriptors = feaArr * 1 # copy
+            else:
+                descriptors = np.vstack([descriptors, feaArr])
 
             no_images += 1
             if (no_images % 50) == 0:
                 actual_time = perf_counter() - init_time
                 print('Computing features... %d/%d ( eta: %.1f s )' % (no_images, n_totales, (n_totales - no_images)  * actual_time / no_images))    
-    
-    pdb.set_trace()
+        
+    # Clustering to obtain bow
+    print("Clustering descriptors...")
+    kmeans = KMeans(n_clusters=n_clusters).fit(descriptors)
+
+    # Saving bow
+    return kmeans, descriptor_list, labels
+
+
+def extractFeatures(kmeans, descriptor_list, labels, no_clusters):
+    image_count = len(descriptor_list)
+    im_features = np.array([np.zeros(no_clusters+1) for i in range(image_count)])
+    no_images = 0
+    init_time = perf_counter()
+    for i in range(image_count):
+        if descriptor_list[i] is None:
+          continue
+        for j in range(len(descriptor_list[i])):
+            feature = descriptor_list[i][j]
+            feature = feature.reshape(1, NANGLES*NSAMPLES)
+            idx = kmeans.predict(feature)
+            im_features[i][idx] += 1
+        # append label
+        im_features[i][-1] = labels[i]
+
+        no_images += 1
+        if (no_images % 50) == 0:
+                actual_time = perf_counter() - init_time
+                print('Encoding images... %d/%d ( eta: %.1f s )' % (no_images, image_count, (image_count - no_images)  * actual_time / no_images))   
+
+    return im_features
 
