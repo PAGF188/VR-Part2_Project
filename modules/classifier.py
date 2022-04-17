@@ -3,6 +3,10 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 import matplotlib.pyplot as plt
 from config import *
+from sklearn.svm import LinearSVC
+from sklearn.metrics import *
+import seaborn as sns
+
 
 def plotHistogram(im_features, no_clusters):
     x_scalar = np.arange(no_clusters)
@@ -35,11 +39,35 @@ def train(feature_matrix):
     # Features
     x_data = feature_matrix[:, 0:-1]
 
-
     # Normalize features
     scale = StandardScaler().fit(x_data)        
     x_data = scale.transform(x_data)
 
-    plotHistogram(x_data, N_CLUSTERS)
+    plotHistogram(x_data, N_CLUSTERS) # Guardar en vez de plot
+
+    model = LinearSVC(random_state=0, tol=1e-5)
+    model.fit(x_data, y_data)
+    return model
+
+
+def test(feature_matrix, model):
+    # Label
+    y_data = feature_matrix[:, -1]
+    # Features
+    x_data = feature_matrix[:, 0:-1]
+
+    z = model.predict(x_data)
+
+    acc = 100 * accuracy_score(y_data, z)
+    print(acc)
+
+    cf = confusion_matrix(y_data, z)
+    cf_image = sns.heatmap(cf, cmap='Blues', annot=True, fmt='g')
+    figure = cf_image.get_figure()    
+    figure.savefig(os.path.join(RESULT_PATH, "cf.png")); plt.clf()
+
+
+
+
 
 

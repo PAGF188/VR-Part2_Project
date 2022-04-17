@@ -14,11 +14,12 @@ def execute(data_path):
     train_names, val_names, test_names = train_val_test_split(images_names, TRAIN_N_IMAGES, VAL_N_IMAGES, TEST_N_IMAGES)
 
     # STEP 2: BOW construction + STEP 3: Describe each image by its histogram of visual features ocurrences.
+    sift_des = DsiftExtractor(GRIDSPACING, PATCHSIZE, 1)
     if os.path.exists(IMAGES_FEATURES_PATH):
         im_features = np.loadtxt(IMAGES_FEATURES_PATH)
+        kmeans_bow = pickle.load(open(BOW_PATH, "rb"))
     else:
         # STEP 2: BOW construction
-        sift_des = DsiftExtractor(GRIDSPACING, PATCHSIZE, 1)
         print("Building BOW...")
         kmeans_bow, descriptor_list, labels = build_bow(train_names, N_CLUSTERS, sift_des)
         pickle.dump(kmeans_bow, open(BOW_PATH, "wb")) # save bow
@@ -29,8 +30,13 @@ def execute(data_path):
         # Save features
         np.savetxt(IMAGES_FEATURES_PATH, im_features)
 
-    # STEP4: Train 
+    # STEP 4: Train 
     model = train(im_features)
+
+    # STEP5 5: TEST
+    test_features, labels = obtain_features_list(test_names, sift_des)
+    X_test = extractFeatures(kmeans_bow, test_features, labels, N_CLUSTERS)
+    test(X_test, model)
     
 
 if __name__ == "__main__":

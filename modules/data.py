@@ -72,4 +72,3 @@ def get_class(filename, label_mapper):
     label = os.path.split(os.path.split(filename)[0])[1]
     return label_mapper[label]
 
-

@@ -3,14 +3,16 @@ import os
 # DATA 
 DATA_PATH = 'data'
 RESULT_PATH = 'results'
-BOW_PATH = os.path.join(RESULT_PATH, 'BOW.txt')
+BOW_PATH = os.path.join(RESULT_PATH, 'BOW.pkl')
 IMAGES_FEATURES_PATH = os.path.join(RESULT_PATH, 'images_features.txt')
 
 MAX_IMAGES_PER_CLASS = 150
 #TRAIN_N_IMAGES = 80
 TRAIN_N_IMAGES = 5
 VAL_N_IMAGES = 20
-TEST_N_IMAGES = 50
+#TEST_N_IMAGES = 50
+TEST_N_IMAGES = 1
+
 LABEL_MAPPER = {
     'bakery': 0,
     'bathroom': 1,

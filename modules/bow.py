@@ -145,7 +145,6 @@ class DsiftExtractor:
                 reshape((feaArr[hcontrast].shape[0],1))
         return feaArr
 
-
 def build_bow(images_names, n_clusters, des):
     """Build bow.
 
@@ -161,7 +160,6 @@ def build_bow(images_names, n_clusters, des):
     kmeans: <class 'sklearn.cluster._kmeans.KMeans'>
         Bag of visual words
     descriptor_list: raw features of eacg image.
-        If None 
     """
 
     labels = np.array([])
@@ -223,3 +221,40 @@ def extractFeatures(kmeans, descriptor_list, labels, no_clusters):
 
     return im_features
 
+def obtain_features_list(images_names, des):
+    """Extract the list of features.
+
+    Parameters
+    ----------
+    images_names : dict
+        Images groupped by class
+    des : feature dense descriptor
+
+    Returns
+    -------
+    descriptor_list: raw features of each image.
+    """
+
+    labels = np.array([])
+    descriptor_list = []
+    # ESTADISTICAS ###
+    init_time = perf_counter()
+    no_images = 0
+    n_totales = len(LABEL_MAPPER.keys()) * TRAIN_N_IMAGES
+    print(f'Computing features... 0/{n_totales}')
+    ############################################################################
+
+    for class_name in images_names.keys(): 
+        labels = np.concatenate([labels, np.repeat(int(LABEL_MAPPER[class_name]), len(images_names[class_name]))])
+        for img_name in images_names[class_name]:
+            img = cv2.imread(img_name, 0)
+            img = cv2.resize(img,(150,150))   # TO RESIZE. CONSIDERAR ELIMINARLO
+            feaArr, positions = des.process_image(img)
+            descriptor_list.append(feaArr)
+        
+            no_images += 1
+            if (no_images % 50) == 0:
+                actual_time = perf_counter() - init_time
+                print('Computing features... %d/%d ( eta: %.1f s )' % (no_images, n_totales, (n_totales - no_images)  * actual_time / no_images))    
+        
+    return descriptor_list, labels
