@@ -1,6 +1,7 @@
 import os
 from config import *
 import pdb
+from re import search
 
 def find_images(dirpath, label_mapper):
     """Detect image files contained in a folder.
@@ -19,11 +20,15 @@ def find_images(dirpath, label_mapper):
         Full path names of all the image files in `dirpath` (and its
         subfolders) grouped by class name.
     """
+    pattern = '_gif'
     images_dictionary = {}
     for class_name in label_mapper.keys():
         images_aux = []
         root_path = os.path.join(dirpath, class_name)
         for img_name in os.listdir(root_path):
+            # _gif images tienen problemas al cargarse con openCV
+            if search(pattern, img_name):   
+                continue
             images_aux.append(os.path.join(root_path, img_name))
             # Stop at MAX_IMAGES_PER_CLASS images
             if len(images_aux) == MAX_IMAGES_PER_CLASS:

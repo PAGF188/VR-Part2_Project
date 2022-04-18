@@ -8,11 +8,9 @@ MODEL_PATH = os.path.join(RESULT_PATH, 'model.pkl')
 IMAGES_FEATURES_PATH = os.path.join(RESULT_PATH, 'images_features.txt')
 
 MAX_IMAGES_PER_CLASS = 150
-#TRAIN_N_IMAGES = 80
-TRAIN_N_IMAGES = 5
+TRAIN_N_IMAGES = 80
 VAL_N_IMAGES = 20
-#TEST_N_IMAGES = 50
-TEST_N_IMAGES = 1
+TEST_N_IMAGES = 50
 
 LABEL_MAPPER = {
     'bakery': 0,

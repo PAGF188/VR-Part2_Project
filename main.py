@@ -30,7 +30,7 @@ def execute(data_path):
         pickle.dump(kmeans_bow, open(BOW_PATH, "wb")) # save bow
 
         # STEP 3: Describe each image by its histogram of visual features ocurrences.
-        print("Extracting images features...")
+        print("Histogram features...")
         im_features = extractFeatures(kmeans_bow, descriptor_list, labels, N_CLUSTERS)
         # Save features
         np.savetxt(IMAGES_FEATURES_PATH, im_features)

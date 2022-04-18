@@ -165,7 +165,8 @@ def obtain_dense_features(images_names, des):
     # ESTADISTICAS ###
     init_time = perf_counter()
     no_images = 0
-    n_totales = len(images_names.keys()) * TRAIN_N_IMAGES
+    _aux_ = list(images_names.keys())[0]
+    n_totales = len(images_names.keys()) * len(images_names[_aux_])
     print(f'Computing dense response... 0/{n_totales}')
 
     descriptor_list = []  # len = no. images
@@ -227,7 +228,7 @@ def build_bow(descriptor_list, n_clusters):
     print("Clustering....")
     kmeans_bow = KMeans(n_clusters=n_clusters).fit(descriptors)
     return kmeans_bow
-    
+
 
 def extractFeatures(kmeans, descriptor_list, labels, no_clusters):
     """ Describe each image by its histogram of visual features ocurrences.
