@@ -17,7 +17,7 @@ def plotHistogram(im_features, no_clusters):
     plt.ylabel("Frequency")
     plt.title("Complete Vocabulary Generated")
     plt.xticks(x_scalar + 0.4, x_scalar)
-    plt.show()
+    plt.savefig(os.path.join(RESULT_PATH, "histogram.png")); plt.clf()
 
 def train(feature_matrix):
     """Obtain SVC model.

@@ -145,72 +145,119 @@ class DsiftExtractor:
                 reshape((feaArr[hcontrast].shape[0],1))
         return feaArr
 
-def build_bow(images_names, n_clusters, des):
-    """Build bow.
+def obtain_dense_features(images_names, des):
+    """Apply descriptor to each image.
 
     Parameters
     ----------
     images_names : dict
         Images groupped by class
-    n_clusters : int
     des : feature dense descriptor
 
     Returns
     -------
-    kmeans: <class 'sklearn.cluster._kmeans.KMeans'>
-        Bag of visual words
-    descriptor_list: raw features of eacg image.
+    descriptor_list: list (len = no. images)
+        Raw features of each image.
+    labels : nd.array
+        True output of each image. Same order than descriptor_list
     """
 
-    labels = np.array([])
-    descriptors = None
-    descriptor_list = []
     # ESTADISTICAS ###
     init_time = perf_counter()
     no_images = 0
-    n_totales = len(LABEL_MAPPER.keys()) * TRAIN_N_IMAGES
-    print(f'Computing features... 0/{n_totales}')
-    ############################################################################
+    n_totales = len(images_names.keys()) * TRAIN_N_IMAGES
+    print(f'Computing dense response... 0/{n_totales}')
+
+    descriptor_list = []  # len = no. images
+    labels = np.array([]) # labels. Same order than descriptor_list
 
     for class_name in images_names.keys(): 
         labels = np.concatenate([labels, np.repeat(int(LABEL_MAPPER[class_name]), len(images_names[class_name]))])
         for img_name in images_names[class_name]:
             img = cv2.imread(img_name, 0)
-            img = cv2.resize(img,(150,150))   # TO RESIZE. CONSIDERAR ELIMINARLO
-            feaArr, positions = des.process_image(img)
+            img = cv2.resize(img, RESIZE_SIZE)   # TO RESIZE. CONSIDERAR ELIMINARLO
+            feaArr, _ = des.process_image(img)
             descriptor_list.append(feaArr)
-            # 1 image -> inicialite array
-            if no_images == 0:
-                descriptors = feaArr * 1 # copy
-            else:
-                descriptors = np.vstack([descriptors, feaArr])
 
+            # ESTADISTICAS ###
             no_images += 1
             if (no_images % 50) == 0:
                 actual_time = perf_counter() - init_time
-                print('Computing features... %d/%d ( eta: %.1f s )' % (no_images, n_totales, (n_totales - no_images)  * actual_time / no_images))    
-        
+                print('Computing dense response... %d/%d ( eta: %.1f s )' % (no_images, n_totales, (n_totales - no_images)  * actual_time / no_images))    
+    
+    return descriptor_list, labels
+
+def _vstackDenseFeatures(descriptor_list):
+    """ Vstack the list of features by image
+
+    Parameters
+    ----------
+    descriptor_list : list (len = no. images)
+        Raw features of each image.
+
+    Returns
+    -------
+    descriptors : nd.array
+        1 row per feature
+    """
+    descriptors = np.array(descriptor_list[0])
+    for descriptor in descriptor_list[1:]:
+        descriptors = np.vstack((descriptors, descriptor)) 
+    return descriptors
+
+def build_bow(descriptor_list, n_clusters):
+    """ Build bow clustering features
+
+    Parameters
+    ----------
+    descriptor_list : list (len = no. images)
+        Raw features of each image.
+    n_clusters : int
+
+    Returns
+    -------
+    kmeans: <class 'sklearn.cluster._kmeans.KMeans'>
+        Bag of visual words
+    """
+    # Vstack descriptor_list
+    print("Vstacking results....")
+    descriptors = _vstackDenseFeatures(descriptor_list)
+
     # Clustering to obtain bow
-    print("Clustering descriptors...")
-    kmeans = KMeans(n_clusters=n_clusters).fit(descriptors)
-
-    # Saving bow
-    return kmeans, descriptor_list, labels
-
+    print("Clustering....")
+    kmeans_bow = KMeans(n_clusters=n_clusters).fit(descriptors)
+    return kmeans_bow
+    
 
 def extractFeatures(kmeans, descriptor_list, labels, no_clusters):
+    """ Describe each image by its histogram of visual features ocurrences.
+
+    Parameters
+    ----------
+    kmeans: <class 'sklearn.cluster._kmeans.KMeans'>
+        Bag of visual words
+    descriptor_list : list (len = no. images)
+        Raw features of each image. 
+    labels : nd.array
+        True output of each image. Same order than descriptor_list
+    n_clusters : int
+
+    Returns
+    -------
+    im_features: np.array
+        Matrix of size N x n+1 where:
+        - N is the number of patterns, 1 row for each image.
+        - n is the number of atributes (computed shape measures). The last column codify the class.
+    """
     image_count = len(descriptor_list)
     im_features = np.array([np.zeros(no_clusters+1) for i in range(image_count)])
     no_images = 0
     init_time = perf_counter()
     for i in range(image_count):
-        if descriptor_list[i] is None:
-          continue
-        for j in range(len(descriptor_list[i])):
-            feature = descriptor_list[i][j]
-            feature = feature.reshape(1, NANGLES*NSAMPLES)
-            idx = kmeans.predict(feature)
-            im_features[i][idx] += 1
+        predictions = kmeans.predict(descriptor_list[i])
+        unique, counts = np.unique(predictions, return_counts=True)
+        for idx_, sum_ in zip(unique, counts):
+            im_features[i][idx_] += sum_
         # append label
         im_features[i][-1] = labels[i]
 
@@ -220,41 +267,3 @@ def extractFeatures(kmeans, descriptor_list, labels, no_clusters):
                 print('Encoding images... %d/%d ( eta: %.1f s )' % (no_images, image_count, (image_count - no_images)  * actual_time / no_images))   
 
     return im_features
-
-def obtain_features_list(images_names, des):
-    """Extract the list of features.
-
-    Parameters
-    ----------
-    images_names : dict
-        Images groupped by class
-    des : feature dense descriptor
-
-    Returns
-    -------
-    descriptor_list: raw features of each image.
-    """
-
-    labels = np.array([])
-    descriptor_list = []
-    # ESTADISTICAS ###
-    init_time = perf_counter()
-    no_images = 0
-    n_totales = len(LABEL_MAPPER.keys()) * TRAIN_N_IMAGES
-    print(f'Computing features... 0/{n_totales}')
-    ############################################################################
-
-    for class_name in images_names.keys(): 
-        labels = np.concatenate([labels, np.repeat(int(LABEL_MAPPER[class_name]), len(images_names[class_name]))])
-        for img_name in images_names[class_name]:
-            img = cv2.imread(img_name, 0)
-            img = cv2.resize(img,(150,150))   # TO RESIZE. CONSIDERAR ELIMINARLO
-            feaArr, positions = des.process_image(img)
-            descriptor_list.append(feaArr)
-        
-            no_images += 1
-            if (no_images % 50) == 0:
-                actual_time = perf_counter() - init_time
-                print('Computing features... %d/%d ( eta: %.1f s )' % (no_images, n_totales, (n_totales - no_images)  * actual_time / no_images))    
-        
-    return descriptor_list, labels

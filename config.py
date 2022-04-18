@@ -4,6 +4,7 @@ import os
 DATA_PATH = 'data'
 RESULT_PATH = 'results'
 BOW_PATH = os.path.join(RESULT_PATH, 'BOW.pkl')
+MODEL_PATH = os.path.join(RESULT_PATH, 'model.pkl')
 IMAGES_FEATURES_PATH = os.path.join(RESULT_PATH, 'images_features.txt')
 
 MAX_IMAGES_PER_CLASS = 150
@@ -39,4 +40,4 @@ ANGLES = np.array(range(NANGLES))*2.0*np.pi/NANGLES
 
 # BOW
 N_CLUSTERS = 40
-RESIZE_SIZE = 300
+RESIZE_SIZE = (150,150)
