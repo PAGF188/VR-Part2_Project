@@ -14,40 +14,43 @@ def execute(data_path):
     train_names, val_names, test_names = train_val_test_split(images_names, TRAIN_N_IMAGES, VAL_N_IMAGES, TEST_N_IMAGES)
 
     # STEP 2: BOW construction + STEP 3: Describe each image by its histogram of visual features ocurrences.
-    sift_des = DsiftExtractor(GRIDSPACING, PATCHSIZE, 1)
-    if os.path.exists(IMAGES_FEATURES_PATH) and os.path.exists(BOW_PATH):
-        print("Loading BOW and imgs. features...")
-        im_features = np.loadtxt(IMAGES_FEATURES_PATH)
-        kmeans_bow = pickle.load(open(BOW_PATH, "rb"))
+    if os.path.exists(TRAIN_IMAGES_FEATURES_PATH) and os.path.exists(VAL_IMAGES_FEATURES_PATH) and os.path.exists(TEST_IMAGES_FEATURES_PATH):
+        print("Loading final imgs. features...")
+        train_im_features = np.loadtxt(TRAIN_IMAGES_FEATURES_PATH)
+        val_im_features = np.loadtxt(VAL_IMAGES_FEATURES_PATH)
+        test_im_features = np.loadtxt(TEST_IMAGES_FEATURES_PATH)
     else:
+        sift_des = DsiftExtractor(GRIDSPACING, PATCHSIZE, 1)
         # STEP 2: BOW construction
         print("Building BOW...")
         # Get dense response for each image
-        descriptor_list, labels = obtain_dense_features(train_names, sift_des)
+        train_descriptor_list, train_labels = obtain_dense_features(train_names, sift_des)
         # Build BOW
-        kmeans_bow = build_bow(descriptor_list, N_CLUSTERS)
+        kmeans_bow = build_bow(train_descriptor_list, N_CLUSTERS)
 
         pickle.dump(kmeans_bow, open(BOW_PATH, "wb")) # save bow
 
         # STEP 3: Describe each image by its histogram of visual features ocurrences.
-        print("Histogram features...")
-        im_features = extractFeatures(kmeans_bow, descriptor_list, labels, N_CLUSTERS)
+        print("TRAIN IMAGES...")
+        train_im_features = extractFeatures(kmeans_bow, train_descriptor_list, train_labels, N_CLUSTERS)
         # Save features
-        np.savetxt(IMAGES_FEATURES_PATH, im_features)
+        np.savetxt(TRAIN_IMAGES_FEATURES_PATH, train_im_features)
 
-    # STEP 4: Train 
-    if os.path.exists(MODEL_PATH):
-        print("Loading SVC model...")
-        model = pickle.load(open(MODEL_PATH, "rb"))
-    else:
-        print("Training SVC model...")
-        model = train(im_features)
-        pickle.dump(model, open(MODEL_PATH, "wb")) # save model
-    
-    # STEP5 5: TEST
-    descriptor_list_test, labels_test = obtain_dense_features(test_names, sift_des)
-    test_im_features = extractFeatures(kmeans_bow, descriptor_list_test, labels_test, N_CLUSTERS)
-    test(test_im_features, model)
+        # Same with val and test
+        print("TEST IMAGES...")
+        val_descriptor_list, val_labels = obtain_dense_features(val_names, sift_des)
+        val_im_features = extractFeatures(kmeans_bow, val_descriptor_list, val_labels, N_CLUSTERS)
+        np.savetxt(VAL_IMAGES_FEATURES_PATH, val_im_features)
+
+        print("VAL IMAGES...")
+        test_descriptor_list, test_labels = obtain_dense_features(test_names, sift_des)
+        test_im_features = extractFeatures(kmeans_bow, test_descriptor_list, test_labels, N_CLUSTERS)
+        np.savetxt(TEST_IMAGES_FEATURES_PATH, test_im_features)
+
+    # STEP 4: Train and TEST
+    print("Training and testing SVC model...")
+    model = train_test(train_im_features, val_im_features, test_im_features)
+    pickle.dump(model, open(MODEL_PATH, "wb")) # save model
     
 
 if __name__ == "__main__":

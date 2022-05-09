@@ -5,7 +5,9 @@ DATA_PATH = 'data'
 RESULT_PATH = 'results'
 BOW_PATH = os.path.join(RESULT_PATH, 'BOW.pkl')
 MODEL_PATH = os.path.join(RESULT_PATH, 'model.pkl')
-IMAGES_FEATURES_PATH = os.path.join(RESULT_PATH, 'images_features.txt')
+TRAIN_IMAGES_FEATURES_PATH = os.path.join(RESULT_PATH, 'train_images_features.txt')
+VAL_IMAGES_FEATURES_PATH = os.path.join(RESULT_PATH, 'val_images_features.txt')
+TEST_IMAGES_FEATURES_PATH = os.path.join(RESULT_PATH, 'test_images_features.txt')
 
 MAX_IMAGES_PER_CLASS = 150
 TRAIN_N_IMAGES = 80
@@ -37,5 +39,5 @@ ALPHA = 9.0
 ANGLES = np.array(range(NANGLES))*2.0*np.pi/NANGLES
 
 # BOW
-N_CLUSTERS = 40
+N_CLUSTERS = 100
 RESIZE_SIZE = (150,150)
