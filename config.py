@@ -14,6 +14,7 @@ TRAIN_N_IMAGES = 80
 VAL_N_IMAGES = 20
 TEST_N_IMAGES = 50
 
+
 LABEL_MAPPER = {
     'bakery': 0,
     'bathroom': 1,
@@ -40,4 +41,10 @@ ANGLES = np.array(range(NANGLES))*2.0*np.pi/NANGLES
 
 # BOW
 N_CLUSTERS = 100
-RESIZE_SIZE = (150,150)
+RESIZE_SIZE = (250, 250)
+
+# LBP
+RADIUS = 3
+N_POINTS = 8 * RADIUS
+METHOD = 'uniform'
+BINS = 25

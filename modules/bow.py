@@ -4,7 +4,7 @@ from config import *
 import pdb
 import cv2
 from time import perf_counter
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, MiniBatchKMeans
 
 def gen_dgauss(sigma):
     '''
@@ -176,7 +176,7 @@ def obtain_dense_features(images_names, des):
         labels = np.concatenate([labels, np.repeat(int(LABEL_MAPPER[class_name]), len(images_names[class_name]))])
         for img_name in images_names[class_name]:
             img = cv2.imread(img_name, 0)
-            img = cv2.resize(img, RESIZE_SIZE)   # TO RESIZE. CONSIDERAR ELIMINARLO
+            img = cv2.resize(img, RESIZE_SIZE)  # CONSIDERAR
             feaArr, _ = des.process_image(img)
             descriptor_list.append(feaArr)
 
@@ -227,6 +227,9 @@ def build_bow(descriptor_list, n_clusters):
     # Clustering to obtain bow
     print("Clustering....")
     kmeans_bow = KMeans(n_clusters=n_clusters).fit(descriptors)
+    # Faster computation
+    #kmeans_bow = MiniBatchKMeans(n_clusters=n_clusters).fit(descriptors)
+
     return kmeans_bow
 
 
