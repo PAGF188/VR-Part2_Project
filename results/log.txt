@@ -1,0 +1,200 @@
+BoW + LBP
+
+(FIPA) PS C:\Users\Usuario\Documents\Pablo\ComputerVision\VR\Parte2\VR-Part2_Project> python .\main.py
+Taking and splitting images...
+Building BOW...
+Computing dense response... 0/800
+Computing dense response... 50/800 ( eta: 34.2 s )
+Computing dense response... 100/800 ( eta: 31.7 s )
+Computing dense response... 150/800 ( eta: 31.4 s )
+Computing dense response... 200/800 ( eta: 28.9 s )
+Computing dense response... 250/800 ( eta: 26.1 s )
+Computing dense response... 300/800 ( eta: 23.6 s )
+Computing dense response... 350/800 ( eta: 21.1 s )
+Computing dense response... 400/800 ( eta: 18.7 s )
+Computing dense response... 450/800 ( eta: 16.3 s )
+Computing dense response... 500/800 ( eta: 13.9 s )
+Computing dense response... 550/800 ( eta: 11.5 s )
+Computing dense response... 600/800 ( eta: 9.2 s )
+Computing dense response... 650/800 ( eta: 6.9 s )
+Computing dense response... 700/800 ( eta: 4.6 s )
+Computing dense response... 750/800 ( eta: 2.3 s )
+Computing dense response... 800/800 ( eta: 0.0 s )
+Vstacking results....
+Clustering....
+TRAIN IMAGES...
+Encoding images... 50/800 ( eta: 16.1 s )
+Encoding images... 100/800 ( eta: 14.7 s )
+Encoding images... 150/800 ( eta: 13.5 s )
+Encoding images... 200/800 ( eta: 12.4 s )
+Encoding images... 250/800 ( eta: 11.3 s )
+Encoding images... 300/800 ( eta: 10.3 s )
+Encoding images... 350/800 ( eta: 9.2 s )
+Encoding images... 400/800 ( eta: 8.2 s )
+Encoding images... 450/800 ( eta: 7.2 s )
+Encoding images... 500/800 ( eta: 6.2 s )
+Encoding images... 550/800 ( eta: 5.1 s )
+Encoding images... 600/800 ( eta: 4.1 s )
+Encoding images... 650/800 ( eta: 3.1 s )
+Encoding images... 700/800 ( eta: 2.1 s )
+Encoding images... 750/800 ( eta: 1.0 s )
+Encoding images... 800/800 ( eta: 0.0 s )
+Computing lbp... 0/800
+Computing LBP... 50/800 ( eta: 55.1 s )
+Computing LBP... 100/800 ( eta: 46.0 s )
+Computing LBP... 150/800 ( eta: 172.4 s )
+Computing LBP... 200/800 ( eta: 161.0 s )
+Computing LBP... 250/800 ( eta: 124.3 s )
+Computing LBP... 300/800 ( eta: 108.8 s )
+Computing LBP... 350/800 ( eta: 96.8 s )
+Computing LBP... 400/800 ( eta: 80.0 s )
+Computing LBP... 450/800 ( eta: 65.3 s )
+Computing LBP... 500/800 ( eta: 54.0 s )
+Computing LBP... 550/800 ( eta: 41.5 s )
+Computing LBP... 600/800 ( eta: 33.1 s )
+Computing LBP... 650/800 ( eta: 24.6 s )
+Computing LBP... 700/800 ( eta: 15.6 s )
+Computing LBP... 750/800 ( eta: 7.5 s )
+Computing LBP... 800/800 ( eta: 0.0 s )
+TEST IMAGES...
+Computing dense response... 0/200
+Computing dense response... 50/200 ( eta: 7.7 s )
+Computing dense response... 100/200 ( eta: 4.8 s )
+Computing dense response... 150/200 ( eta: 2.4 s )
+Computing dense response... 200/200 ( eta: 0.0 s )
+Encoding images... 50/200 ( eta: 3.0 s )
+Encoding images... 100/200 ( eta: 2.0 s )
+Encoding images... 150/200 ( eta: 1.0 s )
+Encoding images... 200/200 ( eta: 0.0 s )
+Computing lbp... 0/200
+Computing LBP... 50/200 ( eta: 67.9 s )
+Computing LBP... 100/200 ( eta: 29.1 s )
+Computing LBP... 150/200 ( eta: 11.3 s )
+Computing LBP... 200/200 ( eta: 0.0 s )
+VAL IMAGES...
+Computing dense response... 0/500
+Computing dense response... 50/500 ( eta: 20.4 s )
+Computing dense response... 100/500 ( eta: 17.9 s )
+Computing dense response... 150/500 ( eta: 15.7 s )
+Computing dense response... 200/500 ( eta: 13.4 s )
+Computing dense response... 250/500 ( eta: 11.2 s )
+Computing dense response... 300/500 ( eta: 8.9 s )
+Computing dense response... 350/500 ( eta: 6.7 s )
+Computing dense response... 400/500 ( eta: 4.5 s )
+Computing dense response... 450/500 ( eta: 2.2 s )
+Computing dense response... 500/500 ( eta: 0.0 s )
+Encoding images... 50/500 ( eta: 9.1 s )
+Encoding images... 100/500 ( eta: 8.1 s )
+Encoding images... 150/500 ( eta: 7.1 s )
+Encoding images... 200/500 ( eta: 6.1 s )
+Encoding images... 250/500 ( eta: 5.1 s )
+Encoding images... 300/500 ( eta: 4.1 s )
+Encoding images... 350/500 ( eta: 3.0 s )
+Encoding images... 400/500 ( eta: 2.0 s )
+Encoding images... 450/500 ( eta: 1.0 s )
+Encoding images... 500/500 ( eta: 0.0 s )
+Computing lbp... 0/500
+Computing LBP... 50/500 ( eta: 30.6 s )
+Computing LBP... 100/500 ( eta: 24.4 s )
+Computing LBP... 150/500 ( eta: 21.9 s )
+Computing LBP... 200/500 ( eta: 18.4 s )
+Computing LBP... 250/500 ( eta: 18.4 s )
+Computing LBP... 300/500 ( eta: 14.1 s )
+Computing LBP... 350/500 ( eta: 13.3 s )
+Computing LBP... 400/500 ( eta: 10.1 s )
+Computing LBP... 450/500 ( eta: 4.9 s )
+Computing LBP... 500/500 ( eta: 0.0 s )
+Training and testing SVC model...
+Sintonizacion:
+    Lambda           Gamma  Kappa (%)      Mejor
+0.03       0.0078125       48.9       48.9
+0.03         0.03125       17.2       48.9
+0.03           0.125        2.2       48.9
+0.03             0.5       36.1       48.9
+0.03               2       35.6       48.9
+0.03               8        4.4       48.9
+0.03              32        0.0       48.9
+0.03             128        0.0       48.9
+0.12       0.0078125       49.4       49.4
+0.12         0.03125       17.2       49.4
+0.12           0.125        2.2       49.4
+0.12             0.5       36.1       49.4
+0.12               2       35.6       49.4
+0.12               8        4.4       49.4
+0.12              32        0.0       49.4
+0.12             128        0.0       49.4
+0.50       0.0078125       56.1       56.1
+0.50         0.03125       17.2       56.1
+0.50           0.125        2.2       56.1
+0.50             0.5       28.9       56.1
+0.50               2       35.6       56.1
+0.50               8        4.4       56.1
+0.50              32        0.0       56.1
+0.50             128        0.0       56.1
+2.00       0.0078125       62.8       62.8
+2.00         0.03125       42.8       62.8
+2.00           0.125       12.8       62.8
+2.00             0.5        2.2       62.8
+2.00               2       35.6       62.8
+2.00               8        4.4       62.8
+2.00              32        0.0       62.8
+2.00             128        0.0       62.8
+8.00       0.0078125       63.3       63.3
+8.00         0.03125       42.8       63.3
+8.00           0.125       12.8       63.3
+8.00             0.5        2.2       63.3
+8.00               2       35.6       63.3
+8.00               8        4.4       63.3
+8.00              32        0.0       63.3
+8.00             128        0.0       63.3
+32.00       0.0078125       63.3       63.3
+32.00         0.03125       42.8       63.3
+32.00           0.125       12.8       63.3
+32.00             0.5        2.2       63.3
+32.00               2       35.6       63.3
+32.00               8        4.4       63.3
+32.00              32        0.0       63.3
+32.00             128        0.0       63.3
+128.00       0.0078125       63.3       63.3
+128.00         0.03125       42.8       63.3
+128.00           0.125       12.8       63.3
+128.00             0.5        2.2       63.3
+128.00               2       35.6       63.3
+128.00               8        4.4       63.3
+128.00              32        0.0       63.3
+128.00             128        0.0       63.3
+512.00       0.0078125       63.3       63.3
+512.00         0.03125       42.8       63.3
+512.00           0.125       12.8       63.3
+512.00             0.5        2.2       63.3
+512.00               2       35.6       63.3
+512.00               8        4.4       63.3
+512.00              32        0.0       63.3
+512.00             128        0.0       63.3
+2048.00       0.0078125       63.3       63.3
+2048.00         0.03125       42.8       63.3
+2048.00           0.125       12.8       63.3
+2048.00             0.5        2.2       63.3
+2048.00               2       35.6       63.3
+2048.00               8        4.4       63.3
+2048.00              32        0.0       63.3
+2048.00             128        0.0       63.3
+8192.00       0.0078125       63.3       63.3
+8192.00         0.03125       42.8       63.3
+8192.00           0.125       12.8       63.3
+8192.00             0.5        2.2       63.3
+8192.00               2       35.6       63.3
+8192.00               8        4.4       63.3
+8192.00              32        0.0       63.3
+8192.00             128        0.0       63.3
+32768.00       0.0078125       63.3       63.3
+32768.00         0.03125       42.8       63.3
+32768.00           0.125       12.8       63.3
+32768.00             0.5        2.2       63.3
+32768.00               2       35.6       63.3
+32768.00               8        4.4       63.3
+32768.00              32        0.0       63.3
+32768.00             128        0.0       63.3
+L_mejor=8, G_mejor=0.0078125, kappa=63.33%
+
+57.99999999999999

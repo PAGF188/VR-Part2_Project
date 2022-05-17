@@ -51,7 +51,7 @@ def train_test(train_im_features, val_im_features, test_im_features):
     x_val = scale.transform(x_val)
     x_test = scale.transform(x_test)
 
-    plotHistogram(x_train, N_CLUSTERS) # Guardar en vez de plot
+    #plotHistogram(x_train, N_CLUSTERS) # Guardar en vez de plot
 
     # TRAIN
     # Sintonizacion lambda y sigma

@@ -179,7 +179,6 @@ def obtain_dense_features(images_names, des):
             img = cv2.resize(img, RESIZE_SIZE)  # CONSIDERAR
             feaArr, _ = des.process_image(img)
             descriptor_list.append(feaArr)
-
             # ESTADISTICAS ###
             no_images += 1
             if (no_images % 50) == 0:

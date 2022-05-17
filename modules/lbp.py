@@ -35,6 +35,7 @@ def computeLBP(images_names):
             lbp = local_binary_pattern(img, N_POINTS, RADIUS, METHOD)
             # Histogram
             hist, _ = np.histogram(lbp, bins=BINS)
+            hist = np.append(hist, LABEL_MAPPER[class_name])
             matrix_features.append(hist)
 
             # ESTADISTICAS ###
